@@ -28,10 +28,14 @@ SCOPES = ['https://www.googleapis.com/auth/drive']
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from googleapiclient.discovery import build
-from googleapiclient.errors import HttpError
-from allauth.socialaccount.models import SocialToken, SocialApp
-from google.oauth2.credentials import Credentials
 from .utils import get_google_credentials
+
+from .models import OnboardingObject
+
+@login_required
+def onboarding_list(request):
+    onboarding_objects = OnboardingObject.objects.all()
+    return render(request, 'main.html', {'onboarding_objects': onboarding_objects})
 
 # this view will host the dashboard
 @login_required
@@ -195,64 +199,7 @@ def dashboard_step_four_view(request):
         ).execute()
 
         # Optionally, you can redirect or render a response here
-        return redirect('dashboard')  # Replace 'some_view_name' with your target view
+        return redirect('dashboard')  
 
 
-
-
-
-
-
-
-
-
-
-
-# def create_folder(request):
-#     creds = get_google_credentials(request)
-#     service = build('drive', 'v3', credentials=creds)
-#     file_metadata = {
-#         'name': 'TESTING FOLDER',
-#         'mimeType': 'application/vnd.google-apps.folder'
-#     }
-#     file = service.files().create(body=file_metadata, fields='id').execute()
-#     return render(request, 'folder_created.html', {'folder_id': file.get('id')})
-
-
-# def create_document(request):
-#     creds = get_google_credentials(request)
-#     service = build('drive', 'v3', credentials=creds)
-#     file_metadata = {
-#         'name': 'New Document',
-#         'mimeType': 'application/vnd.google-apps.document'
-#     }
-#     file = service.files().create(body=file_metadata, fields='id').execute()
-#     return render(request, 'document_created.html', {'document_id': file.get('id')})
-
-
-# def google_drive_view(request):
-#     SCOPES = ['https://www.googleapis.com/auth/drive']
-#     creds = None
-#     if os.path.exists('token.pickle'):
-#         with open('token.pickle', 'rb') as token:
-#             creds = pickle.load(token)
-#     if not creds or not creds.valid:
-#         if creds and creds.expired and creds.refresh_token:
-#             creds.refresh(Request())
-#         else:
-#             flow = InstalledAppFlow.from_client_secrets_file(
-#                 'credentials.json', SCOPES)
-#             creds = flow.run_local_server(port=0)
-#         with open('token.pickle', 'wb') as token:
-#             pickle.dump(creds, token)
-
-#     service = build('drive', 'v3', credentials=creds)
-
-#     # Replace 'your_folder_id_here' with the actual Google Drive folder ID
-#     folder_id = '1hnKXk9V3iieaMHrjPpkowIqBVX0aA1k0'
-#     query = f"'{folder_id}' in parents"
-#     results = service.files().list(q=query, pageSize=10, fields="nextPageToken, files(id, name)").execute()
-#     items = results.get('files', [])
-
-#     return render(request, 'mytemplate.html', {'items': items})
 

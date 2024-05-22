@@ -9,7 +9,7 @@ class DashboardStepOne(forms.Form):
     owner = forms.CharField(
         label="Owner",  
         max_length=100,
-        widget=forms.TextInput(attrs={'placeholder': 'Enter the owner\'s name'})
+        widget=forms.TextInput(attrs={'placeholder': 'Enter the owner(s) name(s)'})
     )
 
 # class DashboardStepTwo(forms.Form):
