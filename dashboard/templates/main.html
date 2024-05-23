@@ -38,19 +38,19 @@
             <div class="col-12">
                 <div class="header">
                     <h2>DUX Automation</h2>
-                    <button class="btn btn-primary" style="margin-right:0px;">Create New Onboarding</button>
+                    <a href="{% url 'create-onboarding' %}" class="btn btn-primary" style="margin-right:0px;">Create New Onboarding</a>
                 </div>
             </div>
             <div class="col-md-8 offset-md-2">
                 {% for obj in onboarding_objects %}
                 <div class="info-box">
                     <h5 class="info-box-header" data-toggle="collapse" data-target="#info{{ forloop.counter }}" aria-expanded="false" aria-controls="info{{ forloop.counter }}">
-                        {{ obj.address }} - {{ obj.owner }}
+                        {{ obj.address }} - {{ obj.owner }} - <span style="color: lavender;">({{ obj.id }})</span>
                     </h5>
                     <div id="info{{ forloop.counter }}" class="collapse">
                         <p>Onboarding start date: {{ obj.onboarding_start_date }}</p>
                         <p>Target launch date: {{ obj.launch_date }}</p>
-                        <button class="btn btn-primary">Access Onboarding Page</button>
+                        <a href="{% url 'onboarding-detail' obj.id %}" class="btn btn-primary">Access Onboarding Page</a>
                     </div>
                 </div>
                 {% endfor %}

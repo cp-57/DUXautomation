@@ -30,19 +30,6 @@
             font-weight: 500;
             cursor: pointer;
         }
-        .checklist {
-            list-style: none; /* Removes default list styling */
-            padding: 0; /* Removes default padding */
-        }
-        .checklist li {
-            padding-bottom: 10px; /* Adds space between items */
-        }
-        .checklist label {
-            cursor: pointer; /* Shows a pointer cursor on hover */
-        }
-        .checklist input[type="checkbox"] {
-            margin-right: 10px; /* Adds space between the checkbox and the label text */
-        }
     </style>
 </head>
 <body>
@@ -50,38 +37,35 @@
         <div class="row">
             <div class="col-12">
                 <div class="header">
-                    <h2>DUX Automation</h2>
+                    <h2>DUX Automation - {{ onboarding_object.address }} - {{ onboarding_object.owner }}</h2>
+                    <a href="{% url 'onboarding-list' %}" class="btn btn-secondary back-button">Back to Dashboard</a>
                 </div>
             </div>
             <div class="col-md-8 offset-md-2">
                 <!-- Info Box 1 -->
                 <div class="info-box">
                     <h5 class="info-box-header" data-toggle="collapse" data-target="#info1" aria-expanded="false" aria-controls="info1">
-                        1. Update Onboarding Tracking Sheet
+                        1. Basic Information
                     </h5>
                     <div id="info1" class="collapse">
-                        <p>Fill in the 'Address' & 'Owner' Information
-                            Update this progress sheet & add notes as you go
-                            Tag team members or ask questions in the notes section</p>
-                            <form method="post" action="{% url 'dashboard-step-one' %}">
-                                {% csrf_token %}
-                                {{ dashboard_step_one_form.as_p }}
-                                <button type="submit" class="btn btn-primary">Create Copy of Onboarding Template</button>
-                            </form>
+                        <p>Fill in the following information. This will initialize the project.</p>
+                        <form method="post">
+                            {% csrf_token %}
+                            {{ dashboard_step_one_form.as_p }}
+                            <button type="submit" class="btn btn-primary">Initialize/Change Onboarding</button>
+                        </form>
                     </div>
                 </div>
                 <!-- Info Box 2 -->
                 <div class="info-box">
                     <h5 class="info-box-header" data-toggle="collapse" data-target="#info2" aria-expanded="false" aria-controls="info2">
-                        2. Setup in Drive
+                        2. Owner, Property, and Expense Folders
                     </h5>
                     <div id="info2" class="collapse">
-                        <p> Add onboarding documents below – 3 folders will be created: </p>
-                        <button class="btn btn-secondary btn-sm">Upload documents</button>
-                        <p></p>
+                        <p>3 folders will be created in Google Drive: </p>
                         <form method="post" action="{% url 'dashboard-step-two' %}">
                             {% csrf_token %}
-                        <button class="btn btn-primary">Create Owner Folder, Property Folder, Expenses Folder</button>
+                            <button class="btn btn-primary">Create Owner Folder, Property Folder, Expenses Folder</button>
                         </form>
                     </div>
                 </div>
@@ -107,8 +91,8 @@
                         <form>
                             <!-- Address field -->
                             <div class="mb-3">
-                                <label for="nameInput" class="form-label">Email</label>
-                                <input type="text" class="form-control" id="nameInput" placeholder="Enter the owner's email">
+                                <label for="emailInput" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="emailInput" placeholder="Enter the owner's email">
                             </div>
                             
                             <!-- Submit button -->
@@ -118,7 +102,7 @@
                 </div>
 
                 <div class="info-box">
-                    <h5 class="info-box-header" data-toggle="collapse" data-target="#info4" aria-expanded="false" aria-controls="info3">
+                    <h5 class="info-box-header" data-toggle="collapse" data-target="#info4" aria-expanded="false" aria-controls="info4">
                         4. Add Property Information
                     </h5>
                     <div id="info4" class="collapse">
@@ -134,25 +118,21 @@
                 </div>
 
                 <div class="info-box">
-                    <h5 class="info-box-header" data-toggle="collapse" data-target="#info5" aria-expanded="false" aria-controls="info3">
+                    <h5 class="info-box-header" data-toggle="collapse" data-target="#info5" aria-expanded="false" aria-controls="info5">
                         5. Listing/Channel Setup
                     </h5>
                     <div id="info5" class="collapse">
-
-
                         <h1>Checklist</h1>
-                            <ul class="checklist">
-                                <li><input type="checkbox" id="item1"><label for="item1">Create a new listing in Hostfully. </label></li>
-                                <li><input type="checkbox" id="item2"><label for="item2">Activate channels (Airbnb, VRBO, Hostfully)</label></li>
-                                <li><input type="checkbox" id="item3"><label for="item3">Turn on integrations.
-                                    Stripe
-                                    Turno
-                                    Pricelabs</label></li>
-                                <li><input type="checkbox" id="item4"><label for="item4">Confirm pricing strategy & optimize </label></li>
-                                <li><input type="checkbox" id="item5"><label for="item5">Add parking info to Hostfully in the "Check In" tab.</label></li>
-                            </ul>
-
-
+                        <ul class="checklist">
+                            <li><input type="checkbox" id="item1"><label for="item1">Create a new listing in Hostfully. </label></li>
+                            <li><input type="checkbox" id="item2"><label for="item2">Activate channels (Airbnb, VRBO, Hostfully)</label></li>
+                            <li><input type="checkbox" id="item3"><label for="item3">Turn on integrations.
+                                Stripe
+                                Turno
+                                Pricelabs</label></li>
+                            <li><input type="checkbox" id="item4"><label for="item4">Confirm pricing strategy & optimize </label></li>
+                            <li><input type="checkbox" id="item5"><label for="item5">Add parking info to Hostfully in the "Check In" tab.</label></li>
+                        </ul>
                     </div>
                 </div>
 

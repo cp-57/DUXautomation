@@ -26,9 +26,10 @@ SCOPES = ['https://www.googleapis.com/auth/drive']
 # B4 Launch Date
 
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from googleapiclient.discovery import build
 from .utils import get_google_credentials
+import uuid
 
 from .models import OnboardingObject
 
@@ -37,48 +38,47 @@ def onboarding_list(request):
     onboarding_objects = OnboardingObject.objects.all()
     return render(request, 'main.html', {'onboarding_objects': onboarding_objects})
 
-# this view will host the dashboard
+def create_onboarding(request):
+    new_onboarding = OnboardingObject.objects.create(
+        id=uuid.uuid4(), 
+        owner='',  
+        address='',
+        expenses_folder_id='',
+        owner_folder_id='',
+        property_folder_id='',
+        onboarding_start_date=None,
+        launch_date=None
+    )
+    return redirect('onboarding-detail', id=new_onboarding.id)
+
 @login_required
-def dashboard(request):
+def onboarding_detail(request, id):
+    onboarding_object = get_object_or_404(OnboardingObject, id=id)
+    # dashboard step one is now integrated directly.
     dashboard_step_one_form = DashboardStepOne()
-    return render(request, "dashboard.html", {'dashboard_step_one_form': dashboard_step_one_form})
-
-
-def dashboard_step_one_view(request):
     if request.method == 'POST':
-        form = DashboardStepOne(request.POST)
-        if form.is_valid():
-            # Process the form data here, e.g., save it to a database or perform other actions
-            address = form.cleaned_data['address']
-            owner = form.cleaned_data['owner']
+            form = DashboardStepOne(request.POST)
+            if form.is_valid():
+                onboarding_object.address = form.cleaned_data['address']
+                onboarding_object.owner = form.cleaned_data['owner']
+                onboarding_object.onboarding_start_date = form.cleaned_data['start_date']
+                onboarding_object.launch_date = form.cleaned_data['launch_date']
+                onboarding_object.save()
+                return redirect('onboarding-detail', id=onboarding_object.id)
+    else:
+        dashboard_step_one_form = DashboardStepOne(initial={
+            'address': onboarding_object.address,
+            'owner': onboarding_object.owner,
+            'start_date': onboarding_object.onboarding_start_date,
+            'launch_date': onboarding_object.launch_date
+        })
+    return render(request, 'dashboard.html', {'onboarding_object': onboarding_object,'dashboard_step_one_form': dashboard_step_one_form})
 
-            # Assume you save the data here
-            creds = get_google_credentials(request.user)
 
-            # Build the Drive v3 API service
-            service = build('drive', 'v3', credentials=creds)
-
-            # Parent folder ID - ONBOARDING_AUTOMATION
-            parent_folder_id = '16wRNGg-ukWU7X4oW0HoxRfYjLd9DMrbW'
-
-            # Define the folder metadata
-            folder_metadata = {
-                'name': f'{address}_{owner}',
-                'mimeType': 'application/vnd.google-apps.folder',
-                'parents': [parent_folder_id]  
-            }
-
-            # Create the folder inside the specified parent folder
-            folder = service.files().create(body=folder_metadata, fields='id').execute()
-
-            # Output the new folder ID
-            print('New Folder ID: %s' % folder.get('id'))
-            request.session['property_folder_id'] = folder.get('id')
-            request.session['owner'] = owner
-            request.session['address'] = address
-
-            # Redirect to the dashboard view after the form is processed
-            return redirect('dashboard')
+# def dashboard_step_one_view(request):
+#     if request.method == 'POST':
+#         form = DashboardStepOne(request.POST)
+        
         
 
 def dashboard_step_two_view(request):
