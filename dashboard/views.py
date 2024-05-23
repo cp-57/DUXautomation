@@ -75,12 +75,6 @@ def onboarding_detail(request, id):
     return render(request, 'dashboard.html', {'onboarding_object': onboarding_object,'dashboard_step_one_form': dashboard_step_one_form})
 
 
-# def dashboard_step_one_view(request):
-#     if request.method == 'POST':
-#         form = DashboardStepOne(request.POST)
-        
-        
-
 def dashboard_step_two_view(request):
     if request.method=="POST":
         # Assume you save the data here
