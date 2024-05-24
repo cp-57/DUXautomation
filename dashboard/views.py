@@ -185,6 +185,9 @@ def dashboard_step_three_view(request, id):
 
         # Handle post-copy logic or response
         print("Copied Files IDs:", new_copies_ids)
+        url = reverse('onboarding-detail', kwargs={'id': id})
+
+        return redirect(url)
 
 def dashboard_step_four_view(request):
     if request.method == "POST":  # Ensure the method check is correctly capitalized

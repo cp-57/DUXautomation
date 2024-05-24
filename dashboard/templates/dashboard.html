@@ -62,11 +62,16 @@
                         2. Owner, Property, and Expense Folders
                     </h5>
                     <div id="info2" class="collapse">
-                        <p>3 folders will be created in Google Drive: </p>
-                        <form method="post" action="{% url 'dashboard-step-two' onboarding_object.id %}">
-                            {% csrf_token %}
-                            <button class="btn btn-primary">Create Owner Folder, Property Folder, Expenses Folder</button>
-                        </form>
+                        {% if onboarding_object.owner_folder_id and onboarding_object.owner_folder_id|length > 0 and onboarding_object.property_folder_id and onboarding_object.property_folder_id|length > 0 and onboarding_object.expenses_folder_id and onboarding_object.expenses_folder_id|length > 0 %}
+                            <a href="https://drive.google.com/drive/folders/{{ onboarding_object.owner_folder_id }}" class="btn btn-primary" target="_blank">Owner Folder</a>
+                            <a href="https://drive.google.com/drive/folders/{{ onboarding_object.property_folder_id }}" class="btn btn-primary" target="_blank">Property Folder</a>
+                            <a href="https://drive.google.com/drive/folders/{{ onboarding_object.expenses_folder_id }}" class="btn btn-primary" target="_blank">Expenses Folder</a>
+                        {% else %}
+                            <form method="post" action="{% url 'dashboard-step-two' onboarding_object.id %}">
+                                {% csrf_token %}
+                                <button class="btn btn-primary">Create Owner, Property, and Expenses Folders</button>
+                            </form>
+                        {% endif %}
                     </div>
                 </div>
                 <!-- Info Box 3 -->
