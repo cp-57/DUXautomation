@@ -63,7 +63,7 @@
                     </h5>
                     <div id="info2" class="collapse">
                         <p>3 folders will be created in Google Drive: </p>
-                        <form method="post" action="{% url 'dashboard-step-two' %}">
+                        <form method="post" action="{% url 'dashboard-step-two' onboarding_object.id %}">
                             {% csrf_token %}
                             <button class="btn btn-primary">Create Owner Folder, Property Folder, Expenses Folder</button>
                         </form>
@@ -82,7 +82,7 @@
                             <li>Rental Agreement</li>
                             <li>W9 Template</li>
                         </ul>
-                        <form method="post" action="{% url 'dashboard-step-three' %}">
+                        <form method="post" action="{% url 'dashboard-step-three' onboarding_object.id %}">
                             {% csrf_token %}
                             <button class="btn btn-primary">Create + Add Documents</button>
                         </form>
